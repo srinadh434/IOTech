@@ -7,7 +7,7 @@ fs.readFile('exercise-02/data/data.json', (err, data) => {
     devices = devices.Devices;
     // discard devices where timestamp is before current time
     devices = devices.filter(device => new Date(device.timestamp*1000).getTime() > Date.now());
-    // rest of the code is same as previous
+   
     let total = 0;
     let uuids = [];
     devices.forEach(device => {
