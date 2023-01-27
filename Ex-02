@@ -1,0 +1,27 @@
+const fs = require('fs');
+const base64 = require('base64-js');
+
+fs.readFile('exercise-02/data/data.json', (err, data) => {
+    if (err) throw err;
+    let devices = JSON.parse(data);
+    devices = devices.Devices;
+    // discard devices where timestamp is before current time
+    devices = devices.filter(device => new Date(device.timestamp*1000).getTime() > Date.now());
+    // rest of the code is same as previous
+    let total = 0;
+    let uuids = [];
+    devices.forEach(device => {
+        total += base64.toByteArray(device.value)[0];
+        let uuid = device.info.match(/uuid: ([a-f0-9-]+)/)[1];
+        uuids.push(uuid);
+    });
+    let output = {
+        "total": total,
+        "uuids": uuids
+    };
+    console.log(output);
+    fs.writeFile("output.json", JSON.stringify(output), (err) => {
+        if (err) throw err;
+        console.log("Data written to file");
+    });
+});
